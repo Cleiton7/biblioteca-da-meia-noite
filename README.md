@@ -1,7 +1,5 @@
 # Biblioteca Jorge Amado
 
-# Sistema de Biblioteca Online
-
 O **Sistema de Biblioteca Online** é uma aplicação desenvolvida para facilitar o gerenciamento de livros e empréstimos de forma simples, rápida e organizada. A plataforma permite que os usuários consultem o acervo disponível e realizem operações relacionadas aos livros e empréstimos.
 
 ### Principais funcionalidades

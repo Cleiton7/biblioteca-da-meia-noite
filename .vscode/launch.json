@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BibliotecaMeiaNoiteApplication<biblioteca-meia-noite>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.bibliotecameianoite.biblioteca.BibliotecaMeiaNoiteApplication",
+            "projectName": "biblioteca-meia-noite",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

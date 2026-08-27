@@ -5,9 +5,11 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
+import com.bibliotecameianoite.biblioteca.model.Autor;
 import com.bibliotecameianoite.biblioteca.model.Emprestimo;
 import com.bibliotecameianoite.biblioteca.model.Livro;
 import com.bibliotecameianoite.biblioteca.model.enums.StatusEmprestimo;
+import com.bibliotecameianoite.biblioteca.repository.AutorRepository;
 import com.bibliotecameianoite.biblioteca.repository.EmprestimoRepository;
 import com.bibliotecameianoite.biblioteca.repository.LivroRepository;
 
@@ -20,10 +22,13 @@ public class LivroService {
 
     private final LivroRepository livroRepository;
     private final EmprestimoRepository emprestimoRepository;
+    private final AutorRepository autorRepository;
 
-    public LivroService(LivroRepository livroRepository, EmprestimoRepository emprestimoRepository) {
+    public LivroService(LivroRepository livroRepository, EmprestimoRepository emprestimoRepository,
+            AutorRepository autorRepository) {
         this.livroRepository = livroRepository;
         this.emprestimoRepository = emprestimoRepository;
+        this.autorRepository = autorRepository;
     }
 
     /**
@@ -32,6 +37,7 @@ public class LivroService {
     public Livro cadastrar(Livro livro) {
         validarDadosObrigatorios(livro);
         validarIsbnUnico(livro.getIsbn(), null);
+        livro.setAutor(buscarAutorCompleto(livro.getAutor()));
         return livroRepository.save(livro);
     }
 
@@ -60,7 +66,7 @@ public class LivroService {
         validarIsbnUnico(livroAtualizado.getIsbn(), id);
 
         livroExistente.setTitulo(livroAtualizado.getTitulo());
-        livroExistente.setAutor(livroAtualizado.getAutor());
+        livroExistente.setAutor(buscarAutorCompleto(livroAtualizado.getAutor()));
         livroExistente.setGenero(livroAtualizado.getGenero());
         livroExistente.setIsbn(livroAtualizado.getIsbn());
         livroExistente.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
@@ -78,6 +84,19 @@ public class LivroService {
         Livro livro = buscarPorId(id);
         verificarSeLivroEstaEmprestado(livro.getId());
         livroRepository.deleteById(id);
+    }
+
+    /**
+     * Busca o autor completo no banco de dados a partir do id informado,
+     * garantindo que os dados retornados na resposta da API estejam completos
+     * e que o autor realmente exista antes de associá-lo ao livro.
+     */
+    private Autor buscarAutorCompleto(Autor autor) {
+        if (autor == null || autor.getId() == null) {
+            throw new IllegalArgumentException("O autor do livro é obrigatório");
+        }
+        return autorRepository.findById(autor.getId())
+                .orElseThrow(() -> new NoSuchElementException("Autor não encontrado com o id: " + autor.getId()));
     }
 
     private void validarDadosObrigatorios(Livro livro) {

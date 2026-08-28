@@ -1,0 +1,30 @@
+.livro-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  mat-form-field {
+    flex: 1 1 220px;
+  }
+
+  .campo-titulo {
+    flex: 1 1 100%;
+  }
+}
+
+.mensagem-erro {
+  color: var(--mat-sys-error, #b00020);
+  margin: 0 0 8px;
+}
+
+.acoes {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

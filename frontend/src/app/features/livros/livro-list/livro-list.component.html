@@ -1,0 +1,59 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Livros cadastrados</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (carregando()) {
+      <div class="carregando">
+        <mat-progress-spinner diameter="32" mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
+
+    @if (mensagemErro()) {
+      <p class="mensagem-erro">{{ mensagemErro() }}</p>
+    }
+
+    @if (!carregando() && !mensagemErro()) {
+      <table mat-table [dataSource]="livros()" class="tabela-livros">
+        <ng-container matColumnDef="titulo">
+          <th mat-header-cell *matHeaderCellDef>Título</th>
+          <td mat-cell *matCellDef="let livro">{{ livro.titulo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="autor">
+          <th mat-header-cell *matHeaderCellDef>Autor</th>
+          <td mat-cell *matCellDef="let livro">{{ livro.autor?.nome }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="genero">
+          <th mat-header-cell *matHeaderCellDef>Gênero</th>
+          <td mat-cell *matCellDef="let livro">{{ labelGenero(livro.genero) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="disponibilidade">
+          <th mat-header-cell *matHeaderCellDef>Disponibilidade</th>
+          <td mat-cell *matCellDef="let livro">
+            {{ livro.quantidadeDisponivel }} / {{ livro.quantidadeTotal }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let livro">
+            <button mat-icon-button color="warn" (click)="excluir(livro)" aria-label="Excluir livro">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+        <tr mat-row *matRowDef="let row; columns: colunas"></tr>
+      </table>
+
+      @if (livros().length === 0) {
+        <p class="sem-livros">Nenhum livro cadastrado até o momento.</p>
+      }
+    }
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,66 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Cadastrar Livro</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="cadastrar()" class="livro-form">
+      <mat-form-field appearance="outline" class="campo-titulo">
+        <mat-label>Título</mat-label>
+        <input matInput formControlName="titulo" placeholder="Ex: Dom Casmurro" />
+        @if (form.get('titulo')?.hasError('required') && form.get('titulo')?.touched) {
+          <mat-error>O título é obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-autor">
+        <mat-label>Autor</mat-label>
+        <mat-select formControlName="autorId">
+          @for (autor of autores(); track autor.id) {
+            <mat-option [value]="autor.id">{{ autor.nome }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('autorId')?.hasError('required') && form.get('autorId')?.touched) {
+          <mat-error>O autor é obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-genero">
+        <mat-label>Gênero</mat-label>
+        <mat-select formControlName="genero">
+          @for (genero of generos; track genero) {
+            <mat-option [value]="genero">{{ labelGenero(genero) }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('genero')?.hasError('required') && form.get('genero')?.touched) {
+          <mat-error>O gênero é obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-quantidade">
+        <mat-label>Quantidade Total</mat-label>
+        <input matInput type="number" formControlName="quantidadeTotal" min="1" />
+        @if (form.get('quantidadeTotal')?.hasError('required') && form.get('quantidadeTotal')?.touched) {
+          <mat-error>A quantidade é obrigatória</mat-error>
+        }
+        @if (form.get('quantidadeTotal')?.hasError('min')) {
+          <mat-error>A quantidade deve ser maior que zero</mat-error>
+        }
+      </mat-form-field>
+
+      @if (mensagemErro()) {
+        <p class="mensagem-erro">{{ mensagemErro() }}</p>
+      }
+
+      <div class="acoes">
+        <button mat-raised-button color="primary" type="submit" [disabled]="enviando()">
+          @if (enviando()) {
+            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+          } @else {
+            Cadastrar Livro
+          }
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

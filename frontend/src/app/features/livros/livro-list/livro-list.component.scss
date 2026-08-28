@@ -1,0 +1,19 @@
+.tabela-livros {
+  width: 100%;
+}
+
+.carregando {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.mensagem-erro {
+  color: var(--mat-sys-error, #b00020);
+}
+
+.sem-livros {
+  text-align: center;
+  padding: 16px 0;
+  opacity: 0.7;
+}

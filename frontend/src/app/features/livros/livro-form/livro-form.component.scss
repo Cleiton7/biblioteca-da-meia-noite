@@ -2,53 +2,125 @@
   display: block;
 }
 
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
 mat-card {
-  background: rgba(22, 33, 62, 0.55) !important;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(244, 233, 216, 0.15);
-  border-radius: 16px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+  position: relative;
+  background: rgba(16, 24, 48, 0.6) !important;
+  backdrop-filter: blur(16px);
+  border-radius: 20px !important;
+  padding: 8px;
+  box-shadow:
+    0 12px 40px rgba(4, 6, 20, 0.55),
+    0 0 0 1px rgba(244, 233, 216, 0.08) inset;
   color: #f5f6ff;
 
+  // Borda com gradiente sutil (dourado -> azul -> lilás), simulando um
+  // contorno "encantado" ao redor do card.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(
+      120deg,
+      rgba(244, 233, 216, 0.55),
+      rgba(139, 111, 214, 0.35),
+      rgba(88, 145, 214, 0.4),
+      rgba(244, 233, 216, 0.55)
+    );
+    background-size: 200% 200%;
+    animation: shimmer 8s linear infinite;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  mat-card-header {
+    padding: 12px 16px 0;
+  }
+
   mat-card-title {
-    color: #f5f6ff !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f8f4e8 !important;
+    font-family: 'Georgia', 'Playfair Display', serif;
+    font-size: 1.35rem !important;
+    letter-spacing: 0.02em;
+
+    &::before {
+      content: '📖';
+      font-size: 1.4rem;
+      filter: drop-shadow(0 0 6px rgba(244, 233, 216, 0.5));
+    }
+  }
+
+  mat-card-content {
+    padding: 20px 16px 16px !important;
   }
 }
 
 .livro-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 18px;
 
   mat-form-field {
     flex: 1 1 220px;
+    transition: filter 0.2s ease;
+
+    &:hover,
+    &:focus-within {
+      filter: drop-shadow(0 0 6px rgba(139, 111, 214, 0.35));
+    }
 
     // Ajusta as cores do Angular Material dentro deste componente para
     // garantir contraste e legibilidade sobre o fundo escuro.
     ::ng-deep {
       .mat-mdc-text-field-wrapper,
       .mat-mdc-form-field-flex {
-        background-color: rgba(255, 255, 255, 0.04);
+        background-color: rgba(255, 255, 255, 0.045);
+        border-radius: 8px;
       }
 
       .mdc-text-field--outlined .mdc-notched-outline__leading,
       .mdc-text-field--outlined .mdc-notched-outline__notch,
       .mdc-text-field--outlined .mdc-notched-outline__trailing {
-        border-color: rgba(244, 233, 216, 0.35) !important;
+        border-color: rgba(244, 233, 216, 0.3) !important;
+      }
+
+      &:focus-within {
+        .mdc-text-field--outlined .mdc-notched-outline__leading,
+        .mdc-text-field--outlined .mdc-notched-outline__notch,
+        .mdc-text-field--outlined .mdc-notched-outline__trailing {
+          border-color: rgba(139, 111, 214, 0.7) !important;
+        }
       }
 
       .mat-mdc-form-field-label,
       .mdc-floating-label {
-        color: rgba(245, 246, 255, 0.75) !important;
+        color: rgba(245, 246, 255, 0.7) !important;
       }
 
       input.mat-mdc-input-element,
       .mat-mdc-select-value-text {
-        color: #f5f6ff !important;
+        color: #f8f4e8 !important;
+      }
+
+      input.mat-mdc-input-element::placeholder {
+        color: rgba(245, 246, 255, 0.4) !important;
       }
 
       .mat-mdc-select-arrow {
-        color: rgba(245, 246, 255, 0.75) !important;
+        color: rgba(245, 246, 255, 0.7) !important;
       }
     }
   }
@@ -59,21 +131,42 @@ mat-card {
 }
 
 .mensagem-erro {
-  color: #ff8a8a;
+  color: #ff9b9b;
   margin: 0 0 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 100, 100, 0.08);
+  border: 1px solid rgba(255, 100, 100, 0.25);
 }
 
 .acoes {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  margin-top: 4px;
 
   button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, #f4e9d8, #e0c9a6) !important;
+    padding: 0 28px !important;
+    height: 44px;
+    background: linear-gradient(135deg, #f8f4e8, #e0c9a6) !important;
     color: #16213e !important;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 22px !important;
+    box-shadow: 0 6px 20px rgba(224, 201, 166, 0.35);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+    &::before {
+      content: '✦';
+      font-size: 0.9rem;
+    }
+
+    &:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(224, 201, 166, 0.5);
+    }
   }
 }

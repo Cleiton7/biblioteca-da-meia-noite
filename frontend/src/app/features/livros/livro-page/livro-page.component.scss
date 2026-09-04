@@ -1,70 +1,118 @@
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .livro-page {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
   max-width: 960px;
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: 56px 24px 0;
   min-height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
+  font-family: 'Georgia', 'Playfair Display', serif;
 
-  // Fundo "Meia-Noite": gradiente escuro em tons de azul marinho,
-  // remetendo ao nome da biblioteca.
-  background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f3460 100%);
-
-  // Estrelas espalhadas via radial-gradients, sem depender de imagens
-  // externas — leve, responsivo e fácil de ajustar.
-  background-image:
-    radial-gradient(2px 2px at 10% 15%, #ffffff 100%, transparent),
-    radial-gradient(1.5px 1.5px at 25% 40%, #ffffff 100%, transparent),
-    radial-gradient(2px 2px at 40% 10%, #ffffff 100%, transparent),
-    radial-gradient(1px 1px at 60% 30%, #ffffff 100%, transparent),
-    radial-gradient(2px 2px at 75% 55%, #ffffff 100%, transparent),
-    radial-gradient(1.5px 1.5px at 88% 20%, #ffffff 100%, transparent),
-    radial-gradient(1px 1px at 15% 70%, #ffffff 100%, transparent),
-    radial-gradient(2px 2px at 50% 85%, #ffffff 100%, transparent),
-    radial-gradient(1.5px 1.5px at 92% 75%, #ffffff 100%, transparent),
-    radial-gradient(1px 1px at 5% 90%, #ffffff 100%, transparent),
-    linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f3460 100%);
-  background-repeat: no-repeat;
-  background-size: cover;
+  // Fundo "Meia-Noite": gradiente escuro em tons de azul marinho, com
+  // uma névoa arroxeada sutil para dar profundidade atmosférica.
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(88, 60, 138, 0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 15% 85%, rgba(30, 60, 114, 0.4) 0%, transparent 70%),
+    linear-gradient(135deg, #05070f 0%, #0a0e27 35%, #16213e 65%, #0f3460 100%);
   background-attachment: fixed;
+  background-size: cover;
 
-  // Lua crescente sutil no canto superior direito.
-  &::before {
-    content: '';
+  // Estrelas com brilhos e tamanhos variados, com cintilação animada.
+  &__stars {
     position: absolute;
-    top: 40px;
-    right: 8%;
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: #f4e9d8;
-    box-shadow:
-      -28px 0 0 -4px #0a0e27,
-      0 0 40px 6px rgba(244, 233, 216, 0.25);
-    opacity: 0.9;
-    pointer-events: none;
+    inset: 0;
     z-index: 0;
+    pointer-events: none;
+
+    span {
+      position: absolute;
+      display: block;
+      background: #ffffff;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  // Silhueta de estante de livros no rodapé, sugerindo o tema da biblioteca.
+  &__shelf {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(10, 14, 39, 0.9) 0 18px,
+      rgba(15, 52, 96, 0.85) 18px 20px,
+      rgba(10, 14, 39, 0.9) 20px 38px,
+      rgba(22, 33, 62, 0.85) 38px 40px
+    );
+    mask-image: linear-gradient(to top, black 55%, transparent 100%);
   }
 
   &__header,
   app-livro-form {
     position: relative;
     z-index: 1;
+    animation: fadeInUp 0.6s ease-out both;
   }
 
   &__header {
     text-align: center;
+    margin-bottom: 8px;
+
+    .lua {
+      display: inline-block;
+      font-size: 2.4rem;
+      animation: float 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px rgba(244, 233, 216, 0.6));
+    }
 
     h1 {
+      margin: 12px 0 4px;
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #f8f4e8;
+      text-shadow:
+        0 0 20px rgba(244, 233, 216, 0.45),
+        0 0 40px rgba(139, 111, 214, 0.25);
+      letter-spacing: 0.03em;
+    }
+
+    p {
       margin: 0;
-      font-size: 1.9rem;
-      color: #f5f6ff;
-      text-shadow: 0 0 18px rgba(244, 233, 216, 0.35);
-      letter-spacing: 0.02em;
+      font-size: 0.95rem;
+      color: rgba(214, 205, 235, 0.75);
+      font-style: italic;
+      letter-spacing: 0.05em;
     }
   }
 }

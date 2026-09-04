@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../shared/material.module';
 import { AutorService } from '../../../services/autor.service';
 import { LivroService } from '../../../services/livro.service';
@@ -35,7 +36,8 @@ export class LivroFormComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly autorService: AutorService,
-    private readonly livroService: LivroService
+    private readonly livroService: LivroService,
+    private readonly snackBar: MatSnackBar
   ) {
     this.form = this.formBuilder.group({
       titulo: ['', [Validators.required, Validators.maxLength(200)]],
@@ -71,6 +73,7 @@ export class LivroFormComponent {
     }
 
     const { titulo, autorId, genero, isbn, anoPublicacao, quantidadeTotal } = this.form.getRawValue();
+    const tituloCadastrado = titulo!;
 
     const payload: LivroPayload = {
       titulo: titulo!,
@@ -95,12 +98,22 @@ export class LivroFormComponent {
           anoPublicacao: null,
           quantidadeTotal: 1
         });
+        this.exibirMensagemSucesso(tituloCadastrado);
         this.livroCadastrado.emit();
       },
       error: (erro) => {
         this.enviando.set(false);
         this.mensagemErro.set(erro?.error?.message ?? 'Erro ao cadastrar o livro. Tente novamente.');
       }
+    });
+  }
+
+  private exibirMensagemSucesso(titulo: string): void {
+    this.snackBar.open(`📚 "${titulo}" cadastrado com sucesso!`, 'Fechar', {
+      duration: 4000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['snackbar-sucesso']
     });
   }
 

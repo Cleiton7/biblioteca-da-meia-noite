@@ -1,3 +1,20 @@
+:host {
+  display: block;
+}
+
+mat-card {
+  background: rgba(22, 33, 62, 0.55) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 233, 216, 0.15);
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+  color: #f5f6ff;
+
+  mat-card-title {
+    color: #f5f6ff !important;
+  }
+}
+
 .livro-form {
   display: flex;
   flex-wrap: wrap;
@@ -5,6 +22,35 @@
 
   mat-form-field {
     flex: 1 1 220px;
+
+    // Ajusta as cores do Angular Material dentro deste componente para
+    // garantir contraste e legibilidade sobre o fundo escuro.
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper,
+      .mat-mdc-form-field-flex {
+        background-color: rgba(255, 255, 255, 0.04);
+      }
+
+      .mdc-text-field--outlined .mdc-notched-outline__leading,
+      .mdc-text-field--outlined .mdc-notched-outline__notch,
+      .mdc-text-field--outlined .mdc-notched-outline__trailing {
+        border-color: rgba(244, 233, 216, 0.35) !important;
+      }
+
+      .mat-mdc-form-field-label,
+      .mdc-floating-label {
+        color: rgba(245, 246, 255, 0.75) !important;
+      }
+
+      input.mat-mdc-input-element,
+      .mat-mdc-select-value-text {
+        color: #f5f6ff !important;
+      }
+
+      .mat-mdc-select-arrow {
+        color: rgba(245, 246, 255, 0.75) !important;
+      }
+    }
   }
 
   .campo-titulo {
@@ -13,7 +59,7 @@
 }
 
 .mensagem-erro {
-  color: var(--mat-sys-error, #b00020);
+  color: #ff8a8a;
   margin: 0 0 8px;
 }
 
@@ -26,5 +72,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    background: linear-gradient(135deg, #f4e9d8, #e0c9a6) !important;
+    color: #16213e !important;
+    font-weight: 600;
   }
 }

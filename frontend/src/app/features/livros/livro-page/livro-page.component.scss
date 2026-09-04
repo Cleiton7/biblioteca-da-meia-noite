@@ -1,17 +1,70 @@
 .livro-page {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 24px;
   max-width: 960px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 48px 24px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Fundo "Meia-Noite": gradiente escuro em tons de azul marinho,
+  // remetendo ao nome da biblioteca.
+  background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f3460 100%);
+
+  // Estrelas espalhadas via radial-gradients, sem depender de imagens
+  // externas — leve, responsivo e fácil de ajustar.
+  background-image:
+    radial-gradient(2px 2px at 10% 15%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 25% 40%, #ffffff 100%, transparent),
+    radial-gradient(2px 2px at 40% 10%, #ffffff 100%, transparent),
+    radial-gradient(1px 1px at 60% 30%, #ffffff 100%, transparent),
+    radial-gradient(2px 2px at 75% 55%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 88% 20%, #ffffff 100%, transparent),
+    radial-gradient(1px 1px at 15% 70%, #ffffff 100%, transparent),
+    radial-gradient(2px 2px at 50% 85%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 92% 75%, #ffffff 100%, transparent),
+    radial-gradient(1px 1px at 5% 90%, #ffffff 100%, transparent),
+    linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f3460 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+
+  // Lua crescente sutil no canto superior direito.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    right: 8%;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #f4e9d8;
+    box-shadow:
+      -28px 0 0 -4px #0a0e27,
+      0 0 40px 6px rgba(244, 233, 216, 0.25);
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &__header,
+  app-livro-form {
+    position: relative;
+    z-index: 1;
+  }
 
   &__header {
     text-align: center;
 
     h1 {
       margin: 0;
-      font-size: 1.75rem;
+      font-size: 1.9rem;
+      color: #f5f6ff;
+      text-shadow: 0 0 18px rgba(244, 233, 216, 0.35);
+      letter-spacing: 0.02em;
     }
   }
 }

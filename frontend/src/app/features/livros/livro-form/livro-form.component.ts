@@ -41,6 +41,13 @@ export class LivroFormComponent {
       titulo: ['', [Validators.required, Validators.maxLength(200)]],
       autorId: [null as number | null, [Validators.required]],
       genero: [null as Genero | null, [Validators.required]],
+      isbn: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^(97[89]-?\d{1,5}-?\d{1,7}-?\d{1,7}-?\d|\d{9}[\dXx])$/)
+        ]
+      ],
       quantidadeTotal: [1, [Validators.required, Validators.min(1)]]
     });
     this.carregarAutores();
@@ -59,12 +66,13 @@ export class LivroFormComponent {
       return;
     }
 
-    const { titulo, autorId, genero, quantidadeTotal } = this.form.getRawValue();
+    const { titulo, autorId, genero, isbn, quantidadeTotal } = this.form.getRawValue();
 
     const payload: LivroPayload = {
       titulo: titulo!,
       autor: { id: autorId! },
       genero: genero!,
+      isbn: isbn!,
       quantidadeTotal: quantidadeTotal!
     };
 
@@ -74,7 +82,7 @@ export class LivroFormComponent {
     this.livroService.cadastrar(payload).subscribe({
       next: () => {
         this.enviando.set(false);
-        this.form.reset({ titulo: '', autorId: null, genero: null, quantidadeTotal: 1 });
+        this.form.reset({ titulo: '', autorId: null, genero: null, isbn: '', quantidadeTotal: 1 });
         this.livroCadastrado.emit();
       },
       error: (erro) => {

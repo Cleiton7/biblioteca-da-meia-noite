@@ -22,6 +22,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,7 +53,11 @@ public class Livro {
     @Column(nullable = false, length = 30)
     private Genero genero;
 
-    @Column(length = 20, unique = true)
+    @NotBlank(message = "O ISBN é obrigatório")
+    @Pattern(
+            regexp = "^(97[89]-?\\d{1,5}-?\\d{1,7}-?\\d{1,7}-?\\d|\\d{9}[\\dXx])$",
+            message = "O ISBN informado está em um formato inválido")
+    @Column(nullable = false, length = 20, unique = true)
     private String isbn;
 
     @Column(name = "ano_publicacao")
@@ -63,7 +68,6 @@ public class Livro {
     @Column(name = "quantidade_total", nullable = false)
     private Integer quantidadeTotal;
 
-    @NotNull(message = "A quantidade disponível é obrigatória")
     @Min(value = 0, message = "A quantidade disponível não pode ser negativa")
     @Column(name = "quantidade_disponivel", nullable = false)
     private Integer quantidadeDisponivel;

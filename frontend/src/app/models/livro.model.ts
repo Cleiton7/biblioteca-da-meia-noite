@@ -26,6 +26,6 @@ export interface LivroPayload {
   autor: { id: number };
   genero: Genero;
   quantidadeTotal: number;
-  isbn?: string;
+  isbn: string;
   anoPublicacao?: number;
 }

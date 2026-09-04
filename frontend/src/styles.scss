@@ -37,18 +37,4 @@ body {
   height: 100%;
 }
 
-// Estilo customizado para a snackbar de confirmação de cadastro de livro,
-// exibindo uma mensagem amigável com destaque visual.
-.snackbar-sucesso {
-  background: #2e7d32 !important;
-  color: #ffffff !important;
-
-  .mat-mdc-snack-bar-label {
-    color: #ffffff !important;
-  }
-
-  .mat-mdc-button {
-    color: #c8e6c9 !important;
-  }
-}
 /* You can add global styles to this file, and also import other style files */

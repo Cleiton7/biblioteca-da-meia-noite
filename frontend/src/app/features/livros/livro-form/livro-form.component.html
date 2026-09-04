@@ -74,6 +74,10 @@
         <p class="mensagem-erro">{{ mensagemErro() }}</p>
       }
 
+      @if (mensagemSucesso()) {
+        <p class="mensagem-sucesso">{{ mensagemSucesso() }}</p>
+      }
+
       <div class="acoes">
         <button mat-raised-button color="primary" type="submit" [disabled]="enviando()">
           @if (enviando()) {

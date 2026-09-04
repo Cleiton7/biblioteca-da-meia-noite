@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../shared/material.module';
 import { AutorService } from '../../../services/autor.service';
 import { LivroService } from '../../../services/livro.service';
@@ -30,14 +29,14 @@ export class LivroFormComponent {
 
   enviando = signal(false);
   mensagemErro = signal('');
+  mensagemSucesso = signal('');
 
   form: ReturnType<FormBuilder['group']>;
 
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly autorService: AutorService,
-    private readonly livroService: LivroService,
-    private readonly snackBar: MatSnackBar
+    private readonly livroService: LivroService
   ) {
     this.form = this.formBuilder.group({
       titulo: ['', [Validators.required, Validators.maxLength(200)]],
@@ -86,6 +85,7 @@ export class LivroFormComponent {
 
     this.enviando.set(true);
     this.mensagemErro.set('');
+    this.mensagemSucesso.set('');
 
     this.livroService.cadastrar(payload).subscribe({
       next: () => {
@@ -109,12 +109,8 @@ export class LivroFormComponent {
   }
 
   private exibirMensagemSucesso(titulo: string): void {
-    this.snackBar.open(`📚 "${titulo}" cadastrado com sucesso!`, 'Fechar', {
-      duration: 4000,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      panelClass: ['snackbar-sucesso']
-    });
+    this.mensagemSucesso.set(`📚 "${titulo}" cadastrado com sucesso!`);
+    setTimeout(() => this.mensagemSucesso.set(''), 5000);
   }
 
   labelGenero(genero: Genero): string {

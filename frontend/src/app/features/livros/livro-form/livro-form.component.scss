@@ -139,6 +139,16 @@ mat-card {
   border: 1px solid rgba(255, 100, 100, 0.25);
 }
 
+.mensagem-sucesso {
+  color: #a8f0b8;
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(90, 200, 130, 0.1);
+  border: 1px solid rgba(90, 200, 130, 0.3);
+  width: 100%;
+}
+
 .acoes {
   width: 100%;
   display: flex;

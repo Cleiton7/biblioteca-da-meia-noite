@@ -19,14 +19,13 @@
   }
 }
 
+:host {
+  display: block;
+}
+
 .livro-page {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 56px 24px 0;
+  width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
@@ -34,6 +33,7 @@
 
   // Fundo "Meia-Noite": gradiente escuro em tons de azul marinho, com
   // uma névoa arroxeada sutil para dar profundidade atmosférica.
+  // Aplicado em todo o container, cobrindo 100% da viewport.
   background:
     radial-gradient(ellipse 60% 40% at 80% 10%, rgba(88, 60, 138, 0.35) 0%, transparent 70%),
     radial-gradient(ellipse 50% 35% at 15% 85%, rgba(30, 60, 114, 0.4) 0%, transparent 70%),
@@ -78,10 +78,21 @@
     mask-image: linear-gradient(to top, black 55%, transparent 100%);
   }
 
-  &__header,
-  app-livro-form {
+  // Wrapper de conteúdo, mantendo a largura de leitura confortável
+  // centralizada, enquanto o fundo (acima) ocupa toda a tela.
+  &__content {
     position: relative;
     z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &__header,
+  app-livro-form {
     animation: fadeInUp 0.6s ease-out both;
   }
 

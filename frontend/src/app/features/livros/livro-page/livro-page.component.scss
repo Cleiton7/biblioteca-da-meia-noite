@@ -1,17 +1,146 @@
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host {
+  display: block;
+}
+
 .livro-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 24px;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: 'Georgia', 'Playfair Display', serif;
+
+  // Fundo "Meia-Noite": gradiente escuro em tons de azul marinho, com
+  // uma névoa arroxeada sutil para dar profundidade atmosférica.
+  // Aplicado em todo o container, cobrindo 100% da viewport.
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(88, 60, 138, 0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 15% 85%, rgba(30, 60, 114, 0.4) 0%, transparent 70%),
+    linear-gradient(135deg, #05070f 0%, #0a0e27 35%, #16213e 65%, #0f3460 100%);
+  background-attachment: fixed;
+  background-size: cover;
+
+  // Estrelas com brilhos e tamanhos variados, com cintilação animada.
+  &__stars {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    span {
+      position: absolute;
+      display: block;
+      background: #ffffff;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  // Silhueta de estante de livros no rodapé, sugerindo o tema da biblioteca.
+  &__shelf {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(10, 14, 39, 0.9) 0 18px,
+      rgba(15, 52, 96, 0.85) 18px 20px,
+      rgba(10, 14, 39, 0.9) 20px 38px,
+      rgba(22, 33, 62, 0.85) 38px 40px
+    );
+    mask-image: linear-gradient(to top, black 55%, transparent 100%);
+  }
+
+  // Wrapper de conteúdo, mantendo a largura de leitura confortável
+  // centralizada, enquanto o fundo (acima) ocupa toda a tela.
+  &__content {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &__header,
+  app-livro-form {
+    animation: fadeInUp 0.6s ease-out both;
+  }
 
   &__header {
     text-align: center;
+    margin-bottom: 8px;
+
+    // Lua crescente desenhada 100% em CSS: um disco claro com um segundo
+    // disco (cor do fundo, sem blur) sobreposto para "recortar" o crescente,
+    // em tom prateado/azulado, sem o aspecto amarelado de um emoji.
+    .lua-wrap {
+      display: inline-flex;
+      padding: 14px;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 14px rgba(223, 228, 242, 0.45))
+              drop-shadow(0 0 30px rgba(139, 111, 214, 0.2));
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .lua {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #f7f9ff 0%, #dfe4f2 60%, #c3cbe4 100%);
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: -16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #05070f;
+      }
+    }
 
     h1 {
-      margin: 0;
-      font-size: 1.75rem;
+      margin: 16px 0 0;
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #f8f4e8;
+      text-shadow:
+        0 0 20px rgba(244, 233, 216, 0.45),
+        0 0 40px rgba(139, 111, 214, 0.25);
+      letter-spacing: 0.03em;
     }
   }
 }

@@ -52,7 +52,6 @@ mat-card {
     align-items: center;
     gap: 10px;
     color: #f8f4e8 !important;
-    font-family: 'Georgia', 'Playfair Display', serif;
     font-size: 1.35rem !important;
     letter-spacing: 0.02em;
 
@@ -85,10 +84,24 @@ mat-card {
     // Ajusta as cores do Angular Material dentro deste componente para
     // garantir contraste e legibilidade sobre o fundo escuro.
     ::ng-deep {
+      // Alinha o raio da borda outline (desenhada pelo MDC em segmentos
+      // SVG) com o raio do fundo do campo, evitando a "quebra" visível
+      // nos cantos do contorno.
+      --mdc-outlined-text-field-container-shape: 8px;
+
       .mat-mdc-text-field-wrapper,
-      .mat-mdc-form-field-flex {
-        background-color: rgba(255, 255, 255, 0.045);
+      .mat-mdc-form-field-flex,
+      .mat-mdc-form-field-infix {
+        background-color: transparent !important;
         border-radius: 8px;
+      }
+
+      .mdc-text-field--outlined .mdc-notched-outline__leading {
+        border-radius: 8px 0 0 8px !important;
+      }
+
+      .mdc-text-field--outlined .mdc-notched-outline__trailing {
+        border-radius: 0 8px 8px 0 !important;
       }
 
       .mdc-text-field--outlined .mdc-notched-outline__leading,
@@ -105,9 +118,48 @@ mat-card {
         }
       }
 
+      // Estado de erro: suaviza o vermelho padrão do Angular Material
+      // (tanto na borda quanto no texto do mat-error) e remove o contorno
+      // interno extra que o MDC desenha sobre o campo quando inválido.
+      &.mat-form-field-invalid,
+      &.ng-invalid.ng-touched {
+        .mdc-text-field--outlined .mdc-notched-outline__leading,
+        .mdc-text-field--outlined .mdc-notched-outline__notch,
+        .mdc-text-field--outlined .mdc-notched-outline__trailing {
+          border-color: rgba(216, 128, 128, 0.55) !important;
+        }
+      }
+
+      .mat-mdc-text-field-wrapper {
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      // Neutraliza as camadas extras que o MDC desenha sobre o input
+      // (usadas originalmente para efeitos de hover/foco/ripple), que
+      // estavam gerando uma sombra escura sutil nas bordas verticais
+      // internas do campo sobre o fundo semi-transparente do formulário.
+      .mat-mdc-form-field-focus-overlay,
+      .mdc-text-field__ripple,
+      .mat-mdc-text-field-wrapper::before,
+      .mat-mdc-text-field-wrapper::after {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        opacity: 0 !important;
+      }
+
+      .mat-mdc-form-field-flex {
+        box-shadow: none !important;
+      }
+
       .mat-mdc-form-field-label,
       .mdc-floating-label {
         color: rgba(245, 246, 255, 0.7) !important;
+      }
+
+      .mat-mdc-form-field-error,
+      mat-error {
+        color: #d98080 !important;
       }
 
       input.mat-mdc-input-element,
@@ -137,6 +189,16 @@ mat-card {
   border-radius: 8px;
   background: rgba(255, 100, 100, 0.08);
   border: 1px solid rgba(255, 100, 100, 0.25);
+}
+
+.mensagem-sucesso {
+  color: #a8f0b8;
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(90, 200, 130, 0.1);
+  border: 1px solid rgba(90, 200, 130, 0.3);
+  width: 100%;
 }
 
 .acoes {

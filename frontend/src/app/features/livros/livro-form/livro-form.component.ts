@@ -29,6 +29,7 @@ export class LivroFormComponent {
 
   enviando = signal(false);
   mensagemErro = signal('');
+  mensagemSucesso = signal('');
 
   form: ReturnType<FormBuilder['group']>;
 
@@ -71,6 +72,7 @@ export class LivroFormComponent {
     }
 
     const { titulo, autorId, genero, isbn, anoPublicacao, quantidadeTotal } = this.form.getRawValue();
+    const tituloCadastrado = titulo!;
 
     const payload: LivroPayload = {
       titulo: titulo!,
@@ -83,6 +85,7 @@ export class LivroFormComponent {
 
     this.enviando.set(true);
     this.mensagemErro.set('');
+    this.mensagemSucesso.set('');
 
     this.livroService.cadastrar(payload).subscribe({
       next: () => {
@@ -95,6 +98,7 @@ export class LivroFormComponent {
           anoPublicacao: null,
           quantidadeTotal: 1
         });
+        this.exibirMensagemSucesso(tituloCadastrado);
         this.livroCadastrado.emit();
       },
       error: (erro) => {
@@ -102,6 +106,11 @@ export class LivroFormComponent {
         this.mensagemErro.set(erro?.error?.message ?? 'Erro ao cadastrar o livro. Tente novamente.');
       }
     });
+  }
+
+  private exibirMensagemSucesso(titulo: string): void {
+    this.mensagemSucesso.set(`📚 "${titulo}" cadastrado com sucesso!`);
+    setTimeout(() => this.mensagemSucesso.set(''), 5000);
   }
 
   labelGenero(genero: Genero): string {

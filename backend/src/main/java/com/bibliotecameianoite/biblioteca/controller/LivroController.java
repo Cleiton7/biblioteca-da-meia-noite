@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bibliotecameianoite.biblioteca.model.Livro;
 import com.bibliotecameianoite.biblioteca.service.LivroService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * Controller responsável por expor os endpoints REST relacionados aos
  * livros. Atua apenas como porta de entrada entre o Angular e o backend,
@@ -23,6 +26,7 @@ import com.bibliotecameianoite.biblioteca.service.LivroService;
  */
 @RestController
 @RequestMapping("/livros")
+@Tag(name = "Livros", description = "Operações de cadastro, consulta, atualização e exclusão de livros")
 public class LivroController {
 
     private final LivroService livroService;
@@ -34,6 +38,7 @@ public class LivroController {
     /**
      * Cadastra um novo livro.
      */
+    @Operation(summary = "Cadastrar livro", description = "Cadastra um novo livro na biblioteca")
     @PostMapping
     public ResponseEntity<Livro> cadastrar(@RequestBody Livro livro) {
         Livro livroCadastrado = livroService.cadastrar(livro);
@@ -43,6 +48,7 @@ public class LivroController {
     /**
      * Lista todos os livros cadastrados.
      */
+    @Operation(summary = "Listar livros", description = "Retorna a lista de todos os livros cadastrados")
     @GetMapping
     public ResponseEntity<List<Livro>> listar() {
         return ResponseEntity.ok(livroService.listar());
@@ -51,6 +57,7 @@ public class LivroController {
     /**
      * Busca um livro pelo id.
      */
+    @Operation(summary = "Buscar livro", description = "Busca um livro cadastrado pelo seu id")
     @GetMapping("/{id}")
     public ResponseEntity<Livro> buscar(@PathVariable Long id) {
         return ResponseEntity.ok(livroService.buscarPorId(id));
@@ -59,6 +66,7 @@ public class LivroController {
     /**
      * Atualiza os dados de um livro já cadastrado.
      */
+    @Operation(summary = "Atualizar livro", description = "Atualiza os dados de um livro já cadastrado")
     @PutMapping("/{id}")
     public ResponseEntity<Livro> atualizar(@PathVariable Long id, @RequestBody Livro livro) {
         return ResponseEntity.ok(livroService.atualizar(id, livro));
@@ -67,6 +75,7 @@ public class LivroController {
     /**
      * Exclui um livro pelo id.
      */
+    @Operation(summary = "Excluir livro", description = "Exclui um livro cadastrado pelo seu id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         livroService.deletar(id);

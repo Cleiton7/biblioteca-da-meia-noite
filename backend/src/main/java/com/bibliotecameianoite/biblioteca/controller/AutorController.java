@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bibliotecameianoite.biblioteca.model.Autor;
 import com.bibliotecameianoite.biblioteca.service.AutorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * Controller responsável por expor os endpoints REST relacionados aos
  * autores. Utilizado principalmente para popular seleções de autor nas
@@ -18,6 +21,7 @@ import com.bibliotecameianoite.biblioteca.service.AutorService;
  */
 @RestController
 @RequestMapping("/autores")
+@Tag(name = "Autores", description = "Operações de consulta de autores cadastrados")
 public class AutorController {
 
     private final AutorService autorService;
@@ -29,6 +33,7 @@ public class AutorController {
     /**
      * Lista todos os autores cadastrados.
      */
+    @Operation(summary = "Listar autores", description = "Retorna a lista de todos os autores cadastrados")
     @GetMapping
     public ResponseEntity<List<Autor>> listar() {
         return ResponseEntity.ok(autorService.listar());
@@ -37,6 +42,7 @@ public class AutorController {
     /**
      * Busca um autor pelo id.
      */
+    @Operation(summary = "Buscar autor", description = "Busca um autor cadastrado pelo seu id")
     @GetMapping("/{id}")
     public ResponseEntity<Autor> buscar(@PathVariable Long id) {
         return ResponseEntity.ok(autorService.buscarPorId(id));

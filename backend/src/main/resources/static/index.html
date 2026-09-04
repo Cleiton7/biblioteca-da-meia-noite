@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca da Meia Noite - API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6e6e6;
+        }
+
+        .container {
+            text-align: center;
+            padding: 3rem 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(6px);
+            max-width: 560px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f4f4f4;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #b8b8c8;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(76, 175, 80, 0.15);
+            color: #6fdc7f;
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        a.button {
+            display: inline-block;
+            text-decoration: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        a.primary {
+            background: #e94560;
+            color: #ffffff;
+        }
+
+        a.secondary {
+            background: transparent;
+            color: #e6e6e6;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        a.button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #6b6b80;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📚</div>
+        <span class="badge">API online</span>
+        <h1>Biblioteca da Meia Noite</h1>
+        <p>
+            API REST para gerenciamento de livros, autores, usuários e
+            empréstimos da biblioteca. Consulte a documentação interativa
+            para conhecer e testar os endpoints disponíveis.
+        </p>
+        <div class="links">
+            <a class="button primary" href="/swagger-ui.html">Ver documentação da API (Swagger)</a>
+            <a class="button secondary" href="/livros">Testar endpoint /livros</a>
+        </div>
+        <footer>Spring Boot &middot; MySQL &middot; Angular</footer>
+    </div>
+</body>
+</html>

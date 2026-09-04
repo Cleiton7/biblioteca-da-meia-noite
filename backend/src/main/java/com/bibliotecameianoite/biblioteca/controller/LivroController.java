@@ -100,7 +100,7 @@ public class LivroController {
             description = "Livro cadastrado com sucesso",
             content = @Content(examples = @ExampleObject(value = EXEMPLO_LIVRO_RESPONSE)))
     @PostMapping
-    public ResponseEntity<Livro> cadastrar(@RequestBody Livro livro) {
+    public ResponseEntity<Livro> cadastrar(@jakarta.validation.Valid @RequestBody Livro livro) {
         Livro livroCadastrado = livroService.cadastrar(livro);
         return ResponseEntity.status(HttpStatus.CREATED).body(livroCadastrado);
     }
@@ -145,7 +145,8 @@ public class LivroController {
             description = "Livro atualizado com sucesso",
             content = @Content(examples = @ExampleObject(value = EXEMPLO_LIVRO_RESPONSE)))
     @PutMapping("/{id}")
-    public ResponseEntity<Livro> atualizar(@PathVariable Long id, @RequestBody Livro livro) {
+    public ResponseEntity<Livro> atualizar(@PathVariable Long id,
+            @jakarta.validation.Valid @RequestBody Livro livro) {
         return ResponseEntity.ok(livroService.atualizar(id, livro));
     }
 

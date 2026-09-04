@@ -105,9 +105,31 @@ mat-card {
         }
       }
 
+      // Estado de erro: suaviza o vermelho padrão do Angular Material
+      // (tanto na borda quanto no texto do mat-error) e remove o contorno
+      // interno extra que o MDC desenha sobre o campo quando inválido.
+      &.mat-form-field-invalid,
+      &.ng-invalid.ng-touched {
+        .mdc-text-field--outlined .mdc-notched-outline__leading,
+        .mdc-text-field--outlined .mdc-notched-outline__notch,
+        .mdc-text-field--outlined .mdc-notched-outline__trailing {
+          border-color: rgba(216, 128, 128, 0.55) !important;
+        }
+      }
+
+      .mat-mdc-text-field-wrapper {
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
       .mat-mdc-form-field-label,
       .mdc-floating-label {
         color: rgba(245, 246, 255, 0.7) !important;
+      }
+
+      .mat-mdc-form-field-error,
+      mat-error {
+        color: #d98080 !important;
       }
 
       input.mat-mdc-input-element,

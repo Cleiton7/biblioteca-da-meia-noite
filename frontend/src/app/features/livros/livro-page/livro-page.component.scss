@@ -100,15 +100,40 @@
     text-align: center;
     margin-bottom: 8px;
 
-    .lua {
-      display: inline-block;
-      font-size: 2.4rem;
+    // Lua crescente desenhada 100% em CSS: um disco claro com um segundo
+    // disco (cor do fundo, sem blur) sobreposto para "recortar" o crescente,
+    // em tom prateado/azulado, sem o aspecto amarelado de um emoji.
+    .lua-wrap {
+      display: inline-flex;
+      padding: 14px;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 14px rgba(223, 228, 242, 0.45))
+              drop-shadow(0 0 30px rgba(139, 111, 214, 0.2));
       animation: float 4s ease-in-out infinite;
-      filter: drop-shadow(0 0 12px rgba(244, 233, 216, 0.6));
+    }
+
+    .lua {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #f7f9ff 0%, #dfe4f2 60%, #c3cbe4 100%);
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: -16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #05070f;
+      }
     }
 
     h1 {
-      margin: 12px 0 4px;
+      margin: 16px 0 0;
       font-size: 2.1rem;
       font-weight: 700;
       color: #f8f4e8;
@@ -116,14 +141,6 @@
         0 0 20px rgba(244, 233, 216, 0.45),
         0 0 40px rgba(139, 111, 214, 0.25);
       letter-spacing: 0.03em;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: rgba(214, 205, 235, 0.75);
-      font-style: italic;
-      letter-spacing: 0.05em;
     }
   }
 }

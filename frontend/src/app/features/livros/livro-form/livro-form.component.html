@@ -48,6 +48,17 @@
         }
       </mat-form-field>
 
+      <mat-form-field appearance="outline" class="campo-ano">
+        <mat-label>Ano de Publicação</mat-label>
+        <input matInput type="number" formControlName="anoPublicacao" placeholder="Ex: 1899" />
+        @if (form.get('anoPublicacao')?.hasError('min') && form.get('anoPublicacao')?.touched) {
+          <mat-error>O ano não pode ser negativo</mat-error>
+        }
+        @if (form.get('anoPublicacao')?.hasError('max') && form.get('anoPublicacao')?.touched) {
+          <mat-error>O ano não pode ser maior que o atual</mat-error>
+        }
+      </mat-form-field>
+
       <mat-form-field appearance="outline" class="campo-quantidade">
         <mat-label>Quantidade Total</mat-label>
         <input matInput type="number" formControlName="quantidadeTotal" min="1" />

@@ -27,7 +27,7 @@ export class LivroListComponent implements OnChanges {
   carregando = signal(false);
   mensagemErro = signal('');
 
-  colunas = ['titulo', 'autor', 'genero', 'isbn', 'disponibilidade', 'acoes'];
+  colunas = ['titulo', 'autor', 'genero', 'isbn', 'anoPublicacao', 'disponibilidade', 'acoes'];
 
   constructor(private readonly livroService: LivroService) {
     this.carregarLivros();

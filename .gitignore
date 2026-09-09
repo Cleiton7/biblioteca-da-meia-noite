@@ -1,0 +1,6 @@
+
+# graphify-axet
+.graphify/
+
+# Docker / variaveis de ambiente locais
+.env

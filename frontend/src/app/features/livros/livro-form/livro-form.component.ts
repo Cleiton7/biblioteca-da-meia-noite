@@ -29,6 +29,7 @@ export class LivroFormComponent {
 
   enviando = signal(false);
   mensagemErro = signal('');
+  mensagemSucesso = signal('');
 
   form: ReturnType<FormBuilder['group']>;
 
@@ -48,6 +49,10 @@ export class LivroFormComponent {
           Validators.pattern(/^(97[89]-?\d{1,5}-?\d{1,7}-?\d{1,7}-?\d|\d{9}[\dXx])$/)
         ]
       ],
+      anoPublicacao: [
+        null as number | null,
+        [Validators.min(0), Validators.max(new Date().getFullYear())]
+      ],
       quantidadeTotal: [1, [Validators.required, Validators.min(1)]]
     });
     this.carregarAutores();
@@ -66,23 +71,34 @@ export class LivroFormComponent {
       return;
     }
 
-    const { titulo, autorId, genero, isbn, quantidadeTotal } = this.form.getRawValue();
+    const { titulo, autorId, genero, isbn, anoPublicacao, quantidadeTotal } = this.form.getRawValue();
+    const tituloCadastrado = titulo!;
 
     const payload: LivroPayload = {
       titulo: titulo!,
       autor: { id: autorId! },
       genero: genero!,
       isbn: isbn!,
+      anoPublicacao: anoPublicacao ?? undefined,
       quantidadeTotal: quantidadeTotal!
     };
 
     this.enviando.set(true);
     this.mensagemErro.set('');
+    this.mensagemSucesso.set('');
 
     this.livroService.cadastrar(payload).subscribe({
       next: () => {
         this.enviando.set(false);
-        this.form.reset({ titulo: '', autorId: null, genero: null, isbn: '', quantidadeTotal: 1 });
+        this.form.reset({
+          titulo: '',
+          autorId: null,
+          genero: null,
+          isbn: '',
+          anoPublicacao: null,
+          quantidadeTotal: 1
+        });
+        this.exibirMensagemSucesso(tituloCadastrado);
         this.livroCadastrado.emit();
       },
       error: (erro) => {
@@ -90,6 +106,11 @@ export class LivroFormComponent {
         this.mensagemErro.set(erro?.error?.message ?? 'Erro ao cadastrar o livro. Tente novamente.');
       }
     });
+  }
+
+  private exibirMensagemSucesso(titulo: string): void {
+    this.mensagemSucesso.set(`📚 "${titulo}" cadastrado com sucesso!`);
+    setTimeout(() => this.mensagemSucesso.set(''), 5000);
   }
 
   labelGenero(genero: Genero): string {

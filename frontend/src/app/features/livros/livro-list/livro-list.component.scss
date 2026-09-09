@@ -1,5 +1,40 @@
+:host {
+  display: block;
+}
+
+mat-card {
+  background: rgba(22, 33, 62, 0.55) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 233, 216, 0.15);
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+  color: #f5f6ff;
+
+  mat-card-title {
+    color: #f5f6ff !important;
+  }
+}
+
 .tabela-livros {
   width: 100%;
+  background: transparent;
+
+  ::ng-deep {
+    th.mat-mdc-header-cell {
+      color: rgba(245, 246, 255, 0.75) !important;
+      border-bottom-color: rgba(244, 233, 216, 0.2) !important;
+    }
+
+    td.mat-mdc-cell {
+      color: #f5f6ff !important;
+      border-bottom-color: rgba(244, 233, 216, 0.12) !important;
+    }
+
+    .mat-mdc-row,
+    .mat-mdc-header-row {
+      background: transparent !important;
+    }
+  }
 }
 
 .carregando {
@@ -9,11 +44,11 @@
 }
 
 .mensagem-erro {
-  color: var(--mat-sys-error, #b00020);
+  color: #ff8a8a;
 }
 
 .sem-livros {
   text-align: center;
   padding: 16px 0;
-  opacity: 0.7;
+  color: rgba(245, 246, 255, 0.6);
 }

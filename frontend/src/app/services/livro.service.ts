@@ -11,7 +11,7 @@ import { Livro, LivroPayload } from '../models/livro.model';
   providedIn: 'root'
 })
 export class LivroService {
-  private readonly apiUrl = 'http://localhost:8080/livros';
+  private readonly apiUrl = '/api/livros';
 
   constructor(private readonly http: HttpClient) {}
 

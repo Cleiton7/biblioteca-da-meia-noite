@@ -9,7 +9,7 @@
 
 mat-card {
   position: relative;
-  background: rgba(16, 24, 48, 0.94) !important;
+  background: rgba(16, 24, 48, 0.6) !important;
   backdrop-filter: blur(16px);
   border-radius: 20px !important;
   padding: 8px;
@@ -96,43 +96,38 @@ mat-card {
         border-radius: 8px;
       }
 
-      .mdc-text-field--outlined .mdc-notched-outline__leading {
-        border-radius: 8px 0 0 8px !important;
-      }
-
-      .mdc-text-field--outlined .mdc-notched-outline__trailing {
-        border-radius: 0 8px 8px 0 !important;
-      }
-
+      // O Angular Material desenha o contorno "outline" em 3 segmentos
+      // separados (leading, notch, trailing) para permitir o recorte do
+      // label flutuante. Como cada segmento tem sua própria borda de 1px,
+      // o encontro entre eles gera uma costura/linha visível sobre fundos
+      // semi-transparentes. Para eliminar isso de vez, tornamos os 3
+      // segmentos totalmente transparentes e desenhamos um único contorno
+      // contínuo por fora, via box-shadow no wrapper do campo.
       .mdc-text-field--outlined .mdc-notched-outline__leading,
       .mdc-text-field--outlined .mdc-notched-outline__notch,
       .mdc-text-field--outlined .mdc-notched-outline__trailing {
-        border-color: rgba(244, 233, 216, 0.3) !important;
+        border-color: transparent !important;
+      }
+
+      .mat-mdc-text-field-wrapper {
+        box-shadow: inset 0 0 0 1px rgba(244, 233, 216, 0.3) !important;
+        outline: none !important;
+        border-radius: 8px;
       }
 
       &:focus-within {
-        .mdc-text-field--outlined .mdc-notched-outline__leading,
-        .mdc-text-field--outlined .mdc-notched-outline__notch,
-        .mdc-text-field--outlined .mdc-notched-outline__trailing {
-          border-color: rgba(139, 111, 214, 0.7) !important;
+        .mat-mdc-text-field-wrapper {
+          box-shadow: inset 0 0 0 1px rgba(139, 111, 214, 0.7) !important;
         }
       }
 
       // Estado de erro: suaviza o vermelho padrão do Angular Material
-      // (tanto na borda quanto no texto do mat-error) e remove o contorno
-      // interno extra que o MDC desenha sobre o campo quando inválido.
+      // (tanto na borda quanto no texto do mat-error).
       &.mat-form-field-invalid,
       &.ng-invalid.ng-touched {
-        .mdc-text-field--outlined .mdc-notched-outline__leading,
-        .mdc-text-field--outlined .mdc-notched-outline__notch,
-        .mdc-text-field--outlined .mdc-notched-outline__trailing {
-          border-color: rgba(216, 128, 128, 0.55) !important;
+        .mat-mdc-text-field-wrapper {
+          box-shadow: inset 0 0 0 1px rgba(216, 128, 128, 0.55) !important;
         }
-      }
-
-      .mat-mdc-text-field-wrapper {
-        box-shadow: none !important;
-        outline: none !important;
       }
 
       // Neutraliza as camadas extras que o MDC desenha sobre o input

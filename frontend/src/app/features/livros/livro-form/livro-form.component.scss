@@ -106,29 +106,35 @@ mat-card {
 
       // O Angular Material desenha o contorno "outline" em 3 segmentos
       // separados (leading, notch, trailing) para permitir o recorte do
-      // label flutuante. Cada segmento é um elemento com border própria;
-      // mesmo com border-color transparente, o border-width ocupado
-      // continua existindo e, combinado ao backdrop-filter do card em
-      // níveis de zoom não inteiros, pode gerar linhas fantasma de
-      // subpixel. Por isso zeramos a borda por completo (não apenas a
-      // cor) e desenhamos um único contorno contínuo por fora, via
-      // box-shadow no wrapper do campo.
-      .mdc-text-field--outlined .mdc-notched-outline__leading,
-      .mdc-text-field--outlined .mdc-notched-outline__notch,
-      .mdc-text-field--outlined .mdc-notched-outline__trailing {
-        border: none !important;
-        border-radius: 0 !important;
+      // label flutuante quando ele sobe para a posição de borda. Mantemos
+      // a borda nativa (e seu notch) para preservar esse recorte — apenas
+      // customizamos a cor/espessura, em vez de substituí-la por um
+      // box-shadow contínuo no wrapper (que não possui notch e por isso
+      // passava por cima do label flutuante).
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: rgba(244, 233, 216, 0.3) !important;
+      }
+
+      .mdc-notched-outline__leading {
+        border-radius: 8px 0 0 8px !important;
+      }
+
+      .mdc-notched-outline__trailing {
+        border-radius: 0 8px 8px 0 !important;
       }
 
       .mat-mdc-text-field-wrapper {
-        box-shadow: inset 0 0 0 1px rgba(244, 233, 216, 0.3) !important;
         outline: none !important;
         border-radius: 8px;
       }
 
       &:focus-within {
-        .mat-mdc-text-field-wrapper {
-          box-shadow: inset 0 0 0 1px rgba(139, 111, 214, 0.7) !important;
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: rgba(139, 111, 214, 0.7) !important;
         }
       }
 
@@ -136,8 +142,10 @@ mat-card {
       // (tanto na borda quanto no texto do mat-error).
       &.mat-form-field-invalid,
       &.ng-invalid.ng-touched {
-        .mat-mdc-text-field-wrapper {
-          box-shadow: inset 0 0 0 1px rgba(216, 128, 128, 0.55) !important;
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: rgba(216, 128, 128, 0.55) !important;
         }
       }
 

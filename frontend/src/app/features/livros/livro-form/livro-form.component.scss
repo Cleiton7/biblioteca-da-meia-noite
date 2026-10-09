@@ -17,6 +17,14 @@ mat-card {
     0 12px 40px rgba(4, 6, 20, 0.55),
     0 0 0 1px rgba(244, 233, 216, 0.08) inset;
   color: #f5f6ff;
+  // Força o navegador a renderizar o card (e seu backdrop-filter) em uma
+  // camada de composição própria. Sem isso, em níveis de zoom não
+  // inteiros o arredondamento de subpixel pode fazer o blur de fundo
+  // compor de forma diferente dentro/fora de elementos com bordas
+  // "invisíveis" (como o notched-outline do Material), revelando linhas
+  // fantasma nos cantos dos campos.
+  transform: translateZ(0);
+  will-change: transform;
 
   // Borda com gradiente sutil (dourado -> azul -> lilás), simulando um
   // contorno "encantado" ao redor do card.
@@ -96,43 +104,49 @@ mat-card {
         border-radius: 8px;
       }
 
-      .mdc-text-field--outlined .mdc-notched-outline__leading {
-        border-radius: 8px 0 0 8px !important;
-      }
-
-      .mdc-text-field--outlined .mdc-notched-outline__trailing {
-        border-radius: 0 8px 8px 0 !important;
-      }
-
-      .mdc-text-field--outlined .mdc-notched-outline__leading,
-      .mdc-text-field--outlined .mdc-notched-outline__notch,
-      .mdc-text-field--outlined .mdc-notched-outline__trailing {
+      // O Angular Material desenha o contorno "outline" em 3 segmentos
+      // separados (leading, notch, trailing) para permitir o recorte do
+      // label flutuante quando ele sobe para a posição de borda. Mantemos
+      // a borda nativa (e seu notch) para preservar esse recorte — apenas
+      // customizamos a cor/espessura, em vez de substituí-la por um
+      // box-shadow contínuo no wrapper (que não possui notch e por isso
+      // passava por cima do label flutuante).
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
         border-color: rgba(244, 233, 216, 0.3) !important;
       }
 
+      .mdc-notched-outline__leading {
+        border-radius: 8px 0 0 8px !important;
+      }
+
+      .mdc-notched-outline__trailing {
+        border-radius: 0 8px 8px 0 !important;
+      }
+
+      .mat-mdc-text-field-wrapper {
+        outline: none !important;
+        border-radius: 8px;
+      }
+
       &:focus-within {
-        .mdc-text-field--outlined .mdc-notched-outline__leading,
-        .mdc-text-field--outlined .mdc-notched-outline__notch,
-        .mdc-text-field--outlined .mdc-notched-outline__trailing {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
           border-color: rgba(139, 111, 214, 0.7) !important;
         }
       }
 
       // Estado de erro: suaviza o vermelho padrão do Angular Material
-      // (tanto na borda quanto no texto do mat-error) e remove o contorno
-      // interno extra que o MDC desenha sobre o campo quando inválido.
+      // (tanto na borda quanto no texto do mat-error).
       &.mat-form-field-invalid,
       &.ng-invalid.ng-touched {
-        .mdc-text-field--outlined .mdc-notched-outline__leading,
-        .mdc-text-field--outlined .mdc-notched-outline__notch,
-        .mdc-text-field--outlined .mdc-notched-outline__trailing {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
           border-color: rgba(216, 128, 128, 0.55) !important;
         }
-      }
-
-      .mat-mdc-text-field-wrapper {
-        box-shadow: none !important;
-        outline: none !important;
       }
 
       // Neutraliza as camadas extras que o MDC desenha sobre o input

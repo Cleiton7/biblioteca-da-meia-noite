@@ -1,22 +1,26 @@
 import { Component } from '@angular/core';
 import { LivroFormComponent } from '../livro-form/livro-form.component';
+import { LivroListComponent } from '../livro-list/livro-list.component';
 
 /**
- * Página responsável por exibir o formulário de cadastro de livros.
- *
- * A listagem de livros foi temporariamente removida desta tela e está
- * preservada na branch `feature/listagem-livros`, podendo ser reintegrada
- * futuramente reimportando o LivroListComponent.
+ * Página responsável por exibir o formulário de cadastro de livros
+ * e a listagem de livros cadastrados.
  */
 @Component({
   selector: 'app-livro-page',
   standalone: true,
-  imports: [LivroFormComponent],
+  imports: [LivroFormComponent, LivroListComponent],
   templateUrl: './livro-page.component.html',
   styleUrl: './livro-page.component.scss'
 })
 export class LivroPageComponent {
+  /**
+   * Incrementado a cada novo cadastro para forçar a atualização
+   * da listagem de livros.
+   */
+  atualizarListagemEm = 0;
+
   onLivroCadastrado(): void {
-    // Sem listagem ativa por enquanto; hook mantido para futura reintegração.
+    this.atualizarListagemEm++;
   }
 }

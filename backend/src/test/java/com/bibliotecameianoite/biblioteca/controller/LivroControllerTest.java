@@ -1,7 +1,11 @@
 package com.bibliotecameianoite.biblioteca.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -132,5 +136,37 @@ class LivroControllerTest {
                         .content(objectMapper.writeValueAsString(livroRequisicao)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Autor não encontrado com o id: 1"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 204 No Content quando o livro é excluído com sucesso")
+    void deveRetornar204QuandoExcluidoComSucesso() throws Exception {
+        doNothing().when(livroService).deletar(10L);
+
+        mockMvc.perform(delete("/livros/{id}", 10L))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 Not Found ao tentar excluir um livro que não existe")
+    void deveRetornar404AoExcluirLivroInexistente() throws Exception {
+        doThrow(new NoSuchElementException("Livro não encontrado com o id: 99"))
+                .when(livroService).deletar(99L);
+
+        mockMvc.perform(delete("/livros/{id}", 99L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Livro não encontrado com o id: 99"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 409 Conflict ao tentar excluir um livro com empréstimos ativos")
+    void deveRetornar409AoExcluirLivroComEmprestimoAtivo() throws Exception {
+        doThrow(new IllegalStateException("O livro não pode ser excluído pois possui empréstimos ativos"))
+                .when(livroService).deletar(anyLong());
+
+        mockMvc.perform(delete("/livros/{id}", 10L))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(
+                        "O livro não pode ser excluído pois possui empréstimos ativos"));
     }
 }

@@ -1,9 +1,12 @@
 import { Component, Input, OnChanges, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../shared/material.module';
 import { LivroService } from '../../../services/livro.service';
 import { Livro } from '../../../models/livro.model';
 import { Genero, GENERO_LABELS } from '../../../models/genero.enum';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 
 /**
  * Componente responsável por exibir a listagem de livros cadastrados
@@ -29,7 +32,11 @@ export class LivroListComponent implements OnChanges {
 
   colunas = ['titulo', 'autor', 'genero', 'isbn', 'anoPublicacao', 'disponibilidade', 'acoes'];
 
-  constructor(private readonly livroService: LivroService) {
+  constructor(
+    private readonly livroService: LivroService,
+    private readonly dialog: MatDialog,
+    private readonly snackBar: MatSnackBar
+  ) {
     this.carregarLivros();
   }
 
@@ -58,9 +65,36 @@ export class LivroListComponent implements OnChanges {
       return;
     }
 
-    this.livroService.deletar(livro.id).subscribe({
-      next: () => this.carregarLivros(),
-      error: () => this.mensagemErro.set('Não foi possível excluir o livro selecionado.')
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        titulo: 'Excluir livro',
+        mensagem: `Tem certeza que deseja excluir o livro "${livro.titulo}"? Essa ação não pode ser desfeita.`,
+        textoConfirmar: 'Excluir'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmado) => {
+      if (confirmado) {
+        this.confirmarExclusao(livro);
+      }
+    });
+  }
+
+  private confirmarExclusao(livro: Livro): void {
+    this.mensagemErro.set('');
+
+    this.livroService.deletar(livro.id!).subscribe({
+      next: () => {
+        this.carregarLivros();
+        this.snackBar.open(`Livro "${livro.titulo}" excluído com sucesso.`, 'Fechar', {
+          duration: 4000
+        });
+      },
+      error: (erro) => {
+        const mensagem = erro?.error?.message ?? 'Não foi possível excluir o livro selecionado.';
+        this.mensagemErro.set(mensagem);
+        this.snackBar.open(mensagem, 'Fechar', { duration: 5000 });
+      }
     });
   }
 

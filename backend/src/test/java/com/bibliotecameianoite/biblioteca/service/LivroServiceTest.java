@@ -3,11 +3,13 @@ package com.bibliotecameianoite.biblioteca.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -20,8 +22,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bibliotecameianoite.biblioteca.model.Autor;
+import com.bibliotecameianoite.biblioteca.model.Emprestimo;
 import com.bibliotecameianoite.biblioteca.model.Livro;
 import com.bibliotecameianoite.biblioteca.model.enums.Genero;
+import com.bibliotecameianoite.biblioteca.model.enums.StatusEmprestimo;
 import com.bibliotecameianoite.biblioteca.repository.AutorRepository;
 import com.bibliotecameianoite.biblioteca.repository.EmprestimoRepository;
 import com.bibliotecameianoite.biblioteca.repository.LivroRepository;
@@ -202,5 +206,67 @@ class LivroServiceTest {
         assertThat(livroCadastrado).isNotNull();
         verify(livroRepository, never()).findByIsbn(any());
         verify(livroRepository, times(1)).save(livro);
+    }
+
+    @Test
+    @DisplayName("Deve excluir um livro com sucesso quando ele não possui empréstimos ativos")
+    void deveExcluirLivroComSucesso() {
+        Livro livro = criarLivroValido();
+        livro.setId(1L);
+
+        when(livroRepository.findById(1L)).thenReturn(Optional.of(livro));
+        when(emprestimoRepository.findByLivroId(1L)).thenReturn(List.of());
+
+        livroService.deletar(1L);
+
+        verify(livroRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao excluir um livro que não existe")
+    void deveLancarExcecaoAoExcluirLivroInexistente() {
+        when(livroRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> livroService.deletar(99L))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("Livro não encontrado");
+
+        verify(livroRepository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao tentar excluir um livro com empréstimo ativo")
+    void deveLancarExcecaoAoExcluirLivroComEmprestimoAtivo() {
+        Livro livro = criarLivroValido();
+        livro.setId(1L);
+
+        Emprestimo emprestimoAtivo = new Emprestimo();
+        emprestimoAtivo.setStatus(StatusEmprestimo.ATIVO);
+
+        when(livroRepository.findById(1L)).thenReturn(Optional.of(livro));
+        when(emprestimoRepository.findByLivroId(1L)).thenReturn(List.of(emprestimoAtivo));
+
+        assertThatThrownBy(() -> livroService.deletar(1L))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("empréstimos ativos");
+
+        verify(livroRepository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    @DisplayName("Deve permitir excluir um livro cujos empréstimos já foram devolvidos")
+    void devePermitirExcluirLivroComEmprestimosDevolvidos() {
+        Livro livro = criarLivroValido();
+        livro.setId(1L);
+
+        Emprestimo emprestimoDevolvido = new Emprestimo();
+        emprestimoDevolvido.setStatus(StatusEmprestimo.DEVOLVIDO);
+
+        when(livroRepository.findById(1L)).thenReturn(Optional.of(livro));
+        when(emprestimoRepository.findByLivroId(1L)).thenReturn(List.of(emprestimoDevolvido));
+
+        livroService.deletar(1L);
+
+        verify(livroRepository, times(1)).deleteById(1L);
     }
 }

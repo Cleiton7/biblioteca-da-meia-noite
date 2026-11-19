@@ -1,0 +1,53 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Realizar Empréstimo</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="realizar()" class="emprestimo-form">
+      <mat-form-field appearance="outline" class="campo-usuario">
+        <mat-label>Usuário</mat-label>
+        <mat-select formControlName="usuarioId">
+          @for (usuario of usuarios(); track usuario.id) {
+            <mat-option [value]="usuario.id">{{ usuario.nome }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('usuarioId')?.hasError('required') && form.get('usuarioId')?.touched) {
+          <mat-error>O usuário é obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-livro">
+        <mat-label>Livro</mat-label>
+        <mat-select formControlName="livroId">
+          @for (livro of livrosDisponiveis(); track livro.id) {
+            <mat-option [value]="livro.id">
+              {{ livro.titulo }} ({{ livro.quantidadeDisponivel }} disponíveis)
+            </mat-option>
+          }
+        </mat-select>
+        @if (form.get('livroId')?.hasError('required') && form.get('livroId')?.touched) {
+          <mat-error>O livro é obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      @if (mensagemErro()) {
+        <p class="mensagem-erro">{{ mensagemErro() }}</p>
+      }
+
+      @if (mensagemSucesso()) {
+        <p class="mensagem-sucesso">{{ mensagemSucesso() }}</p>
+      }
+
+      <div class="acoes">
+        <button mat-raised-button color="primary" type="submit" [disabled]="enviando()">
+          @if (enviando()) {
+            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+          } @else {
+            Realizar empréstimo
+          }
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

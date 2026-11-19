@@ -1,0 +1,6 @@
+// Estilos específicos da página de empréstimos. O fundo, as estrelas e o
+// cabeçalho vêm do SCSS da página de livros (ver styleUrls no componente).
+app-emprestimo-form,
+app-nav-menu {
+  animation: fadeInUp 0.6s ease-out both;
+}

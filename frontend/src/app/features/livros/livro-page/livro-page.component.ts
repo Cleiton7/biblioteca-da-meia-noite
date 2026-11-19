@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LivroFormComponent } from '../livro-form/livro-form.component';
 import { LivroListComponent } from '../livro-list/livro-list.component';
+import { NavMenuComponent } from '../../../shared/nav-menu/nav-menu.component';
 
 /**
  * Página responsável por exibir o formulário de cadastro de livros
@@ -9,7 +10,7 @@ import { LivroListComponent } from '../livro-list/livro-list.component';
 @Component({
   selector: 'app-livro-page',
   standalone: true,
-  imports: [LivroFormComponent, LivroListComponent],
+  imports: [LivroFormComponent, LivroListComponent, NavMenuComponent],
   templateUrl: './livro-page.component.html',
   styleUrl: './livro-page.component.scss'
 })

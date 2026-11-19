@@ -4,6 +4,38 @@
   </mat-card-header>
 
   <mat-card-content>
+    <form class="busca-id" (submit)="$event.preventDefault(); buscarPorId()">
+      <mat-form-field appearance="outline" class="busca-id__campo">
+        <mat-label>Buscar por ID</mat-label>
+        <input
+          matInput
+          type="number"
+          min="1"
+          step="1"
+          inputmode="numeric"
+          placeholder="Ex.: 1"
+          [value]="idBusca()"
+          (input)="atualizarIdBusca($any($event.target).value)"
+        />
+      </mat-form-field>
+
+      <button mat-flat-button type="submit" class="busca-id__buscar" [disabled]="carregando()">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+
+      @if (buscaAtiva() !== null || idBusca()) {
+        <button mat-stroked-button type="button" class="busca-id__limpar" (click)="limparBusca()">
+          <mat-icon>close</mat-icon>
+          Limpar
+        </button>
+      }
+    </form>
+
+    @if (buscaAtiva() !== null) {
+      <p class="aviso-busca">Exibindo resultado da busca pelo ID {{ buscaAtiva() }}.</p>
+    }
+
     @if (carregando()) {
       <div class="carregando">
         <mat-progress-spinner diameter="32" mode="indeterminate"></mat-progress-spinner>

@@ -15,6 +15,78 @@ mat-card {
   }
 }
 
+.busca-id {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 4px;
+
+  &__campo {
+    flex: 0 1 220px;
+
+    ::ng-deep {
+      --mdc-outlined-text-field-container-shape: 8px;
+
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: rgba(244, 233, 216, 0.3) !important;
+      }
+
+      &:focus-within {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: rgba(139, 111, 214, 0.7) !important;
+        }
+      }
+
+      .mat-mdc-form-field-label,
+      .mdc-floating-label {
+        color: rgba(245, 246, 255, 0.7) !important;
+      }
+
+      input.mat-mdc-input-element {
+        color: #f8f4e8 !important;
+      }
+
+      input.mat-mdc-input-element::placeholder {
+        color: rgba(245, 246, 255, 0.4) !important;
+      }
+    }
+  }
+
+  &__buscar {
+    height: 44px;
+    padding: 0 20px !important;
+    background: linear-gradient(135deg, #f8f4e8, #e0c9a6) !important;
+    color: #16213e !important;
+    font-weight: 700;
+    border-radius: 22px !important;
+  }
+
+  &__limpar {
+    height: 44px;
+    border-radius: 22px !important;
+    color: #f5f6ff !important;
+    border-color: rgba(244, 233, 216, 0.35) !important;
+  }
+}
+
+.aviso-busca {
+  margin: 4px 0 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #cdbff5;
+  background: rgba(139, 111, 214, 0.12);
+  border: 1px solid rgba(139, 111, 214, 0.3);
+}
+
 .tabela-livros {
   width: 100%;
   background: transparent;

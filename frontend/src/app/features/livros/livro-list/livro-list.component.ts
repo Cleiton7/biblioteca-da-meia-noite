@@ -10,7 +10,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 
 /**
  * Componente responsável por exibir a listagem de livros cadastrados
- * em uma tabela do Angular Material.
+ * em uma tabela do Angular Material, com busca de livro por id.
  */
 @Component({
   selector: 'app-livro-list',
@@ -30,6 +30,12 @@ export class LivroListComponent implements OnChanges {
   carregando = signal(false);
   mensagemErro = signal('');
 
+  /** Valor digitado no campo "Buscar por ID". */
+  idBusca = signal('');
+
+  /** Id da busca em andamento; null quando a listagem completa é exibida. */
+  buscaAtiva = signal<number | null>(null);
+
   colunas = ['titulo', 'autor', 'genero', 'isbn', 'anoPublicacao', 'disponibilidade', 'acoes'];
 
   constructor(
@@ -41,7 +47,9 @@ export class LivroListComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    this.carregarLivros();
+    // Um novo cadastro invalida qualquer busca em andamento, para que o
+    // livro recém-criado não fique escondido atrás de um filtro antigo.
+    this.limparBusca();
   }
 
   carregarLivros(): void {
@@ -58,6 +66,53 @@ export class LivroListComponent implements OnChanges {
         this.carregando.set(false);
       }
     });
+  }
+
+  atualizarIdBusca(valor: string): void {
+    this.idBusca.set(valor);
+  }
+
+  /**
+   * Busca um livro pelo id informado e exibe o resultado na tabela.
+   */
+  buscarPorId(): void {
+    const texto = this.idBusca().trim();
+    const id = Number(texto);
+
+    if (!texto || !Number.isInteger(id) || id <= 0) {
+      this.buscaAtiva.set(null);
+      this.mensagemErro.set('Informe um ID válido (número inteiro positivo).');
+      return;
+    }
+
+    this.carregando.set(true);
+    this.mensagemErro.set('');
+
+    this.buscaAtiva.set(null);
+    this.livroService.buscarPorId(id).subscribe({
+      next: (livro) => {
+        this.livros.set([livro]);
+        this.buscaAtiva.set(id);
+        this.carregando.set(false);
+      },
+      error: (erro) => {
+        this.mensagemErro.set(
+          erro?.status === 404
+            ? (erro?.error?.message ?? `Livro não encontrado com o id: ${id}`)
+            : 'Não foi possível buscar o livro informado.'
+        );
+        this.carregando.set(false);
+      }
+    });
+  }
+
+  /**
+   * Limpa o campo e a busca ativa, voltando a exibir a listagem completa.
+   */
+  limparBusca(): void {
+    this.idBusca.set('');
+    this.buscaAtiva.set(null);
+    this.carregarLivros();
   }
 
   excluir(livro: Livro): void {
@@ -85,7 +140,7 @@ export class LivroListComponent implements OnChanges {
 
     this.livroService.deletar(livro.id!).subscribe({
       next: () => {
-        this.carregarLivros();
+        this.limparBusca();
         this.snackBar.open(`Livro "${livro.titulo}" excluído com sucesso.`, 'Fechar', {
           duration: 4000
         });

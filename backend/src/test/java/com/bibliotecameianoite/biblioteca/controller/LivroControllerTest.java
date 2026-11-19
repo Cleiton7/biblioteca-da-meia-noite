@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -136,6 +137,29 @@ class LivroControllerTest {
                         .content(objectMapper.writeValueAsString(livroRequisicao)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Autor não encontrado com o id: 1"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 200 OK com o livro quando o id existe")
+    void deveRetornar200AoBuscarLivroPorIdExistente() throws Exception {
+        when(livroService.buscarPorId(10L)).thenReturn(livroCadastrado);
+
+        mockMvc.perform(get("/livros/{id}", 10L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(10))
+                .andExpect(jsonPath("$.titulo").value("Dom Casmurro"))
+                .andExpect(jsonPath("$.isbn").value("978-85-359-0277-5"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 Not Found ao buscar um livro por id inexistente")
+    void deveRetornar404AoBuscarLivroPorIdInexistente() throws Exception {
+        when(livroService.buscarPorId(99L))
+                .thenThrow(new NoSuchElementException("Livro não encontrado com o id: 99"));
+
+        mockMvc.perform(get("/livros/{id}", 99L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Livro não encontrado com o id: 99"));
     }
 
     @Test

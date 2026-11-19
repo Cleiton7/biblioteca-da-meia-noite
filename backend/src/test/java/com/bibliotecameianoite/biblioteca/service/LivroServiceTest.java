@@ -209,6 +209,30 @@ class LivroServiceTest {
     }
 
     @Test
+    @DisplayName("Deve retornar o livro quando o id existe")
+    void deveBuscarLivroPorIdComSucesso() {
+        Livro livro = criarLivroValido();
+        livro.setId(1L);
+
+        when(livroRepository.findById(1L)).thenReturn(Optional.of(livro));
+
+        Livro encontrado = livroService.buscarPorId(1L);
+
+        assertThat(encontrado).isSameAs(livro);
+        verify(livroRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao buscar um livro por id inexistente")
+    void deveLancarExcecaoAoBuscarLivroPorIdInexistente() {
+        when(livroRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> livroService.buscarPorId(99L))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("Livro não encontrado com o id: 99");
+    }
+
+    @Test
     @DisplayName("Deve excluir um livro com sucesso quando ele não possui empréstimos ativos")
     void deveExcluirLivroComSucesso() {
         Livro livro = criarLivroValido();
